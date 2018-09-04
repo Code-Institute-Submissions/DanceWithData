@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700|Exo:100,200,300,400,500,600,700');
+
+/* Header */
+
+header {
+    background-color: #27292b;
+    padding-bottom: 20px;
+}
+
+
+
+/* Title */
+
+
+
+input, button{
+    display: inline-block;
+    margin: 0;
+}
+
+input {
+    padding-left: 3px;
+}
+
+.find-track {
+    background-color: #40bc67;
+    border: 2px solid #40bc67;
+    color: white;
+    
+}
+
+
+#search-bar {
+    text-align: center;
+    padding-top: 50px;
+}
+
+#title-text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #40bc67;
+    padding-top: 20px;
+}
+
+#subtitle-text {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    color: #40bc67;
+}
+
+/* Section */
+
+section {
+    background-color: #27292b;
+}
+
+.section-text {
+    font-family: "Exo", sans-serif;
+    font-weight: 400;
+    color: #40bc67;
+}
+
+.section-heading {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#track-info-container {
+    min-height: 360px;
+    width: 100%;
+    padding: 25px;
+    background-color: black;
+    border: 2px solid black;
+    margin-top: 30px;
+}
+
+#artist-info-container {
+    min-height: 360px;
+    width: 100%;
+    padding: 25px;
+    background-color: black;
+    border: 2px solid black;
+    margin-top: 30px;
+}
+
+#album-info-container {
+    min-height: 360px;
+    width: 100%;
+    padding: 25px;
+    background-color: black;
+    border: 2px solid black;
+    margin-top: 30px;
+}
+
+#track-data-container {
+    min-height: 280px;
+    width: 80%;
+    margin-top: 30px;
+    border: 2px solid black;
+    background-color: black;
+    padding: 25px;
+    margin-bottom: 40px;
+}
