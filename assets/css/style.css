@@ -102,3 +102,9 @@ section {
     padding: 25px;
     margin-bottom: 40px;
 }
+
+.top-list {
+    font-family: "Exo", sans-serif;
+    font-weight: 400;
+    color: #40bc67;
+}
