@@ -11,29 +11,95 @@ header {
 
 /* Title */
 
-
-
-input, button{
+input {
     display: inline-block;
-    margin: 0;
+    margin-left: 50px;
+    margin-top: 15px;
+}
+
+button {
+    display: inline-block;
+    margin-top: 15px;
 }
 
 input {
     padding-left: 3px;
 }
 
-.find-track {
-    background-color: #40bc67;
-    border: 2px solid #40bc67;
-    color: white;
-    
+#find-track {
+    margin-top: 5px;
+    margin-left: 100px;
 }
 
 
 #search-bar {
-    text-align: center;
+    text-align: left;
     padding-top: 50px;
 }
+
+/* Search Results */
+
+.table-container {
+    height: 10em;
+}
+
+.hidden{
+    display: none;
+}
+
+.hidden-track, .hidden-artist, .hidden-album {
+    display: none;
+}
+
+table {
+    display: flex;
+    flex-flow: column;
+    max-height: 230px;
+    width: 100%;
+    padding-top: 10px;
+}
+
+table thead {
+    flex: 0 0 auto;
+    width: calc(100% - 0.9em);
+    color: #40bc67;
+    font-family: "Exo", sans-serif;
+    font-weight: 600;
+
+}
+
+table tbody {
+
+    flex: 1 1 auto;
+    display: block;
+    overflow-y: scroll;
+    color: #40bc67;
+    font-family: "Exo", sans-serif;
+    font-weight: 400;
+}
+
+table tbody tr {
+    width: 100%;
+}
+
+table thead,
+table tbody tr {
+    display: table;
+    table-layout: fixed;
+}
+
+tbody tr:hover {
+    background-color: #fafafa;
+    transition-duration: 0.5s;
+    color: #27292b;
+    text-decoration: underline;
+    cursor: pointer;
+    
+}
+
+
+
+/* fonts   */
 
 #title-text {
     font-family: "Montserrat", sans-serif;
@@ -103,8 +169,8 @@ section {
     margin-bottom: 40px;
 }
 
-.top-list {
-    font-family: "Exo", sans-serif;
-    font-weight: 400;
-    color: #40bc67;
+.list-style {
+    list-style-type: none;
 }
+
+

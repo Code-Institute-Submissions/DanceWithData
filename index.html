@@ -22,11 +22,30 @@
 				<br>
 				<h5 id="subtitle-text">Powered by Spotify&copy;</h5>
 			</div>
-			<div class="col-9">
+			<div class="col-3">
 				<form id="search-bar">
 					<input type="text" name="search-track" id="song_name" placeholder="search for song..." />
-					<button type="button" id="find-track">Find Track</button>
+					<button type="button" id="find-track" onclick="searchSong();">Find Track</button>
 				</form>
+			</div>
+			<div class="col-6 search-results">
+				<table class="song-table" id ="results-table">
+					<thead>
+						<tr>
+							<th class="subtitle-text">Track</th>
+							<th class="subtitle-text">Artist</th>
+							<th class="subtitle-text">Album</th>
+							<th class="hidden" id="song-id">ID</th>
+							<th class="hidden" id="artist-id">ID</th>
+							<th class="hidden" id="album-id">ID</th>
+							
+						</tr>
+					</thead>
+					<tbody id="search-results-body">
+						
+					</tbody>
+				</table>
+
 			</div>
 		</div>
 	</header>
@@ -44,7 +63,7 @@
 			<div class="col-4">
 				<div id="artist-info-container">
 					<h2 class="section-heading section-text">Artist</h2>
-					<div id="top-artists"></div>
+					<div id="album-info"></div>
 				</div>
 			</div>
 
