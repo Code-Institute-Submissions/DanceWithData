@@ -1,5 +1,4 @@
 // Get the hash of the url
-
 const hash = window.location.hash
     .substring(1)
     .split('&')
@@ -12,15 +11,13 @@ const hash = window.location.hash
     }, {});
 window.location.hash = '';
 
-
-
 // Set token
 let _token = hash.access_token;
 
 
 const authEndpoint = 'https://accounts.spotify.com/authorize';
 
-// my details attained when registering app
+// My details attained when registering app
 const clientId = '53a7dc6ddb8b49f1a134b9695e65a644';
 const redirectUri = 'https://dance-with-data-milestone-project-jstokes1994.c9users.io/index.html';
 const scopes = [
@@ -33,8 +30,7 @@ if (!_token) {
 }
 
 
-
-// search bar feature
+// Search bar feature
 
 function searchSong(name) {
     $("#find-track").click(function(e) {
@@ -47,15 +43,19 @@ function searchSong(name) {
             beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function(data) {
                 // console.log(data);  TEST
-                //Need to add feedback to user if there is no results found
+                // Need to add feedback to user if there is no results found
+
+                // Append the returned data to a scrolling table for user selection
+                // As returned JSON is an array need .map()
                 data.tracks.items.map(function(track, artists, album) {
                     let item = $('<tr>' + '<td>' + track.name + '</td>' + '<td>' + track.artists[0].name + "</td>" + '<td>' + track.album.name + '</td>' +
                         '<td id="hidden" class="hidden-track">' + track.id + '</td>' + '<td id="hidden" class="hidden-artist">' + track.artists[0].id + '</td>' +
                         '<td id="hidden" class="hidden-album">' + track.album.id + '</td>' + '</tr>');
                     item.appendTo($('#search-results-body'));
 
-                    findSongId();
-                    
+                    //Invoke the id finder function only when this information is apended
+                    findId();
+
                 });
             }
         });
@@ -63,43 +63,56 @@ function searchSong(name) {
 }
 
 
-// when a row is clicked, the track id of that row is stored as a variable and passed to the functions for each container
-// also the containers holding track info is emptied on row click.
-function findSongId() {
+// When a row is clicked, the track id of that row is stored as a variable and passed to the functions for each container
+// Also the containers holding track info is emptied on row click.
+function findId() {
     $("tr").click(function() {
+        // Track info
         let trackListInfo = document.getElementById("track-list");
         trackListInfo.innerHTML = "";
-        let albumInfo = document.getElementById("album-info");
-        albumInfo.innerHTML = "";
+        // Artist info
+        let artistListInfo = document.getElementById("artist-info");
+        artistListInfo.innerHTML = "";
+        //Album info
+        let albumListInfo = document.getElementById("album-info");
+        albumListInfo.innerHTML = "";
+
+        //Get the IDs for the URL search from the non visible part of the table
+
         var $songId = $(this).find(".hidden-track").text();
-        //console.log($songId); //Test
-        var $artistId = $(this).find(".hidden-artist").text(); 
-        //console.log($artistId);
+        //console.log($songId); //TEST
+        var $artistId = $(this).find(".hidden-artist").text();
+        //console.log($artistId); //TEST
+        var $albumId = $(this).find(".hidden-album").text();
+
+
+        //Invoke the info finder functions, passing in the ID for each container
         trackInfo($songId);
         artistInfo($artistId);
-        
-        
+        albumInfo($albumId);
+
+
     });
 }
 
-
+// Collect the track ID for the selected song and insert it in the URL. Append the selected results to the container.
 function trackInfo(id) {
-    //console.log(id);
+    //console.log(id) //TEST;
     let songIdentifier = id;
     $.ajax({
         url: `https://api.spotify.com/v1/tracks/${songIdentifier}`,
         type: "GET",
         beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
         success: function(data) {
-            let item = $('<ul class="list-style section-text">' + '<li>' + "Track Name: " + data.name + '</li>' + '<li>' + "Length: " + data.duration_ms + '</li>' + '<li>' +
+            let item = $('<ul class="list-style section-text">' + '<li>' + "Track Name: " + data.name + '</li>' + '<li>' + "Length (ms): " + data.duration_ms + '</li>' + '<li>' +
                 "Popularity: " + data.popularity + '</li>' + '<li>' + "Explicit: " + data.explicit + '</li>' + '</ul>');
             item.appendTo($('#track-list'));
         }
     });
 }
 
-
-function artistInfo(id){
+// Collect the artist ID for the selected song and insert it in the URL. Append the selected results to the container.
+function artistInfo(id) {
     let artistIdentifier = id;
     $.ajax({
         url: `https://api.spotify.com/v1/artists/${artistIdentifier}`,
@@ -107,19 +120,31 @@ function artistInfo(id){
         beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
         success: function(data) {
             let item = $('<ul class="list-style section-text">' + '<li>' + "Artist Name: " + data.name + '</li>' + '<li>' + "Followers: " + data.followers.total +
-            '</li>' + '<li>' + "Genres: " + data.genres + '</li>' + '<li>' + "Popularity: " + data.popularity + '</li>' + '</ul>');
+                '</li>' + '<li>' + "Genres: " + data.genres + '</li>' + '<li>' + "Popularity: " + data.popularity + '</li>' + '</ul>');
+            item.appendTo($('#artist-info'));
+        }
+    });
+}
+
+// Collect the album ID for the selected song and insert it in the URL. Append the selected results to the container.
+function albumInfo(id) {
+    let albumIdentifier = id;
+    $.ajax({
+        url: `https://api.spotify.com/v1/albums/${albumIdentifier}`,
+        type: "GET",
+        beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+        success: function(data) {
+            let item = $('<ul class="list-style section-text">' + '<li>' + "Album Name: " + data.name + '</li>' + '<li>' + "Release Date: " + data.release_date +
+                '</li>' + '<li>' + "Total Tracks: " + data.total_tracks + '</li>' + '<li>' + "Popularity: " + data.popularity + '</li>' + '</ul>');
             item.appendTo($('#album-info'));
         }
     });
-    
 }
 
-function albumInfo(){
-    
-}
 
-function trackData(){
-    
+// Collect the album ID for the selected song and insert it in the URL. Append the selected results to the container.
+function trackData() {
+
 }
 
 
