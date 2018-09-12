@@ -184,6 +184,10 @@ section {
 
 .list-heading {
     font-weight: 600;
-    
+}
+
+.data-desc {
+    text-align: center;
+    margin: 0 auto;
 }
 
