@@ -49,13 +49,12 @@ function searchSong(name) {
                 // As returned JSON is an array need .map()
                 data.tracks.items.map(function(track, artists, album) {
                     let item = $('<tr>' + '<td>' + track.name + '</td>' + '<td>' + track.artists[0].name + "</td>" + '<td>' + track.album.name + '</td>' +
-                        '<td id="hidden" class="hidden-track">' + track.id + '</td>' + '<td id="hidden" class="hidden-artist">' + track.artists[0].id + '</td>' +
-                        '<td id="hidden" class="hidden-album">' + track.album.id + '</td>' + '</tr>');
+                        '<td id="hidden-table" class="hidden-track">' + track.id + '</td>' + '<td id="hidden-table" class="hidden-artist">' + track.artists[0].id + '</td>' +
+                        '<td id="hidden-table" class="hidden-album">' + track.album.id + '</td>' + '</tr>');
                     item.appendTo($('#search-results-body'));
 
-                    //Invoke the id finder function only when this information is apended
+                    //Invoke the ID finder function only when this information is apended to tbody
                     findId();
-
                 });
             }
         });
@@ -73,9 +72,14 @@ function findId() {
         // Artist info
         let artistListInfo = document.getElementById("artist-info");
         artistListInfo.innerHTML = "";
-        //Album info
+        // Album info
         let albumListInfo = document.getElementById("album-info");
         albumListInfo.innerHTML = "";
+        // Track data info
+        let trackDataInfo1 = document.getElementById("track-data-1");
+        trackDataInfo1.innerHTML = "";
+        let trackDataInfo2 = document.getElementById("track-data-2");
+        trackDataInfo2.innerHTML = "";
 
         //Get the IDs for the URL search from the non visible part of the table
 
@@ -85,13 +89,12 @@ function findId() {
         //console.log($artistId); //TEST
         var $albumId = $(this).find(".hidden-album").text();
 
-
         //Invoke the info finder functions, passing in the ID for each container
+
         trackInfo($songId);
         artistInfo($artistId);
         albumInfo($albumId);
-
-
+        trackData($songId);
     });
 }
 
@@ -104,8 +107,9 @@ function trackInfo(id) {
         type: "GET",
         beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
         success: function(data) {
-            let item = $('<ul class="list-style section-text">' + '<li>' + "Track Name: " + data.name + '</li>' + '<li>' + "Length (ms): " + data.duration_ms + '</li>' + '<li>' +
-                "Popularity: " + data.popularity + '</li>' + '<li>' + "Explicit: " + data.explicit + '</li>' + '</ul>');
+            let item = $('<ul class="list-style section-text">' + '<li>' + "<span class='list-heading'>Track Name:</span> " + data.name + '</li>' + '<li>' +
+                "<span class='list-heading'>Length (ms):</span> " + data.duration_ms + '</li>' + '<li>' + "<span class='list-heading'>Popularity:</span> " +
+                data.popularity + '</li>' + '<li>' + "<span class='list-heading'>Explicit:</span> " + data.explicit + '</li>' + '</ul>');
             item.appendTo($('#track-list'));
         }
     });
@@ -119,8 +123,9 @@ function artistInfo(id) {
         type: "GET",
         beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
         success: function(data) {
-            let item = $('<ul class="list-style section-text">' + '<li>' + "Artist Name: " + data.name + '</li>' + '<li>' + "Followers: " + data.followers.total +
-                '</li>' + '<li>' + "Genres: " + data.genres + '</li>' + '<li>' + "Popularity: " + data.popularity + '</li>' + '</ul>');
+            let item = $('<ul class="list-style section-text">' + '<li>' + "<span class='list-heading'>Artist Name:</span> " + data.name + '</li>' + '<li>' +
+                "<span class='list-heading'>Followers:</span> " + data.followers.total + '</li>' + '<li>' + "<span class='list-heading'>Genres:</span> " +
+                data.genres + '</li>' + '<li>' + "<span class='list-heading'>Popularity:</span> " + data.popularity + '</li>' + '</ul>');
             item.appendTo($('#artist-info'));
         }
     });
@@ -134,35 +139,35 @@ function albumInfo(id) {
         type: "GET",
         beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
         success: function(data) {
-            let item = $('<ul class="list-style section-text">' + '<li>' + "Album Name: " + data.name + '</li>' + '<li>' + "Release Date: " + data.release_date +
-                '</li>' + '<li>' + "Total Tracks: " + data.total_tracks + '</li>' + '<li>' + "Popularity: " + data.popularity + '</li>' + '</ul>');
+            let item = $('<ul class="list-style section-text">' + '<li>' + "<span class='list-heading'>Album Name:</span> " + data.name + '</li>' + '<li>' +
+                "<span class='list-heading'>Release Date:</span> " + data.release_date + '</li>' + '<li>' + "<span class='list-heading'>Total Tracks:</span>" +
+                data.total_tracks + '</li>' + '<li>' + "<span class='list-heading'>Popularity:</span> " + data.popularity + '</li>' + '</ul>');
             item.appendTo($('#album-info'));
         }
     });
 }
 
 
-// Collect the album ID for the selected song and insert it in the URL. Append the selected results to the container.
-function trackData() {
-
+// Collect the track ID for the selected song and insert it in the URL. Append the selected results to the container.
+function trackData(id) {
+    let trackIdentifier = id;
+    $.ajax({
+        url: `https://api.spotify.com/v1/audio-features/${trackIdentifier}`,
+        type: "GET",
+        beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+        success: function(data) {
+            let item1 = $('<ul class="list-style section-text">' + '<li>' + "<span class='list-heading'>Acousticness:</span> " + data.acousticness + '</li>' + '<li>' +
+                "<span class='list-heading'>Danceability:</span> " + data.danceability + '</li>' + '<li>' + "<span class='list-heading'>Energy:</span> " + data.energy +
+                '</li>' + '<li>' + "<span class='list-heading'>Key:</span> " + data.key + '</li>' + '<li>' + "<span class='list-heading'>Instrumentalness:</span> " +
+                data.instrumentalness + '</li>' + '</ul>');
+            item1.appendTo($('#track-data-1'));
+            let item2 = $('<ul class="list-style section-text">' + '<li>' + "<span class='list-heading'>Liveness:</span> " + data.liveness + '</li>' + '<li>' +
+                "<span class='list-heading'>Loudness:</span> " + data.loudness + '</li>' + '<li>' + "<span class='list-heading'>Speechiness:</span> " + data.speechiness +
+                '</li>' + '<li>' + "<span class='list-heading'>Tempo:</span> " + data.tempo + '</li>' + '<li>' + "<span class='list-heading'>Valence</span> : " + data.valence +
+                '</li>' + '</ul>');
+            item2.appendTo($('#track-data-2'));
+        }
+    });
 }
 
 
-/* example of how to call using token and use data
-
-// Make a call using the token
-$.ajax({
-    url: "https://api.spotify.com/v1/me/top/artists",
-    type: "GET",
-    beforeSend: function(xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-    success: function(data) {
-        // console.log(data);
-        // Do something with the returned data
-        data.items.map(function(artist) {
-            let item = $('<li class="top-list">' + artist.name + '</li>');
-            item.appendTo($('#top-artists'));
-        });
-    }
-});
-
-*/
