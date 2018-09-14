@@ -1,3 +1,4 @@
+// Implicit Grant Flow
 // Get the hash of the url
 const hash = window.location.hash
     .substring(1)
@@ -53,7 +54,6 @@ function searchSong() {
                     item.appendTo($('#search-results-body'));
 
                     $("tr").click(function() {
-
                         // Empty containers on click
                         // Track Info
                         let trackListInfo = document.getElementById("track-list");
